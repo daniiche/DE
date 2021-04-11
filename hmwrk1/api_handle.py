@@ -55,7 +55,7 @@ def loop(url, date, headers, operation):
                 dt.timedelta(days=1)
             ).date()
         )
-        time.sleep(1)
+        #time.sleep(1)
     return response_list
 
 
@@ -65,7 +65,7 @@ def save(inp):
 
     if not os.path.exists(path):
         try:
-            os.mkdir(path)
+            os.makedirs(path)
         except OSError:
             print("Creation of the directory %s failed" % path)
         else:
