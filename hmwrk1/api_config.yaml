@@ -1,0 +1,5 @@
+api_handle:
+  url: "https://robot-dreams-de-api.herokuapp.com"
+  endpoint: "/out_of_stock"
+  start_date: "2021-01-02"
+  headers: {"content-type": "application/json", "authorization": NULL}

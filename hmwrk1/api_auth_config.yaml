@@ -1,0 +1,6 @@
+api_handle:
+  url: "https://robot-dreams-de-api.herokuapp.com"
+  endpoint: "/auth"
+  payload: {"username": "rd_dreams", "password": "djT6LasE"}
+  token_type: "JWT "
+  headers: {"content-type": "application/json"}
