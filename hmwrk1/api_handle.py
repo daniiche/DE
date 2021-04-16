@@ -4,7 +4,7 @@ import yaml
 import json
 import datetime as dt
 from datetime import datetime
-import time
+# import time
 from operator import add, sub
 import os
 
@@ -32,7 +32,10 @@ def auth():
 
 def get(url, date, headers):
     try:
-        result = requests.get(url, data=json.dumps({"date": date}), headers=headers, timeout=10)
+        result = requests.get(url
+                              , data=json.dumps({"date": date})
+                              , headers=headers
+                              , timeout=10)
 
         return result.json()
 
@@ -44,15 +47,16 @@ def loop(url, date, headers, operation):
     flag = True
     while flag:
         result = get(url, date, headers)
-        if isinstance(result, dict) and (result['message'] == 'No out_of_stock items for this date'):
+        if isinstance(result, dict) \
+                and (result['message'] == 'No out_of_stock items for this date'):
             flag = False
         else:
             print(result[0]['date'])
             response_list.append(result)
         date = str(
             operation(
-                datetime.strptime(date, "%Y-%m-%d"),
-                dt.timedelta(days=1)
+                datetime.strptime(date, "%Y-%m-%d")
+                , dt.timedelta(days=1)
             ).date()
         )
         #time.sleep(1)
@@ -84,9 +88,10 @@ def request(token):
     headers['authorization'] = token
     # from 2021-01-01 to  2021-04-16
     # assume the date was set to be 2021-01-02
-    joinedlist = loop(url, start_date, headers, sub) + loop(url, start_date, headers, add)
+    joined_list = loop(url, start_date, headers, sub) \
+        + loop(url, start_date, headers, add)
 
-    for item in joinedlist:
+    for item in joined_list:
         save(item)
 
 
