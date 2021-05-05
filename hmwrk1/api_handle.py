@@ -10,7 +10,7 @@ import os
 
 
 def load_config(config_path):
-    with open(os.getcwd()+config_path, mode='r') as yaml_file:
+    with open(os.path.join(os.getcwd(), config_path), mode='r') as yaml_file:
         config = yaml.safe_load(yaml_file)
         return config
 
@@ -65,7 +65,7 @@ def loop(url, date, headers, operation):
 
 def save(inp):
     name = inp[0]['date']
-    path = os.getcwd()+f'/data/{name}'
+    path = os.path.join(os.getcwd(), f'/data/{name}')
 
     if not os.path.exists(path):
         try:
