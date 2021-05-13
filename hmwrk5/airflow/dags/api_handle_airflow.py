@@ -52,7 +52,7 @@ def save(inp):
     client = InsecureClient('http://127.0.0.1:50070/', user='user')
 
     name = inp[0]['date']
-    path = '/data'
+    path = f'/bronze/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}/'
 
     client.makedirs(path)
 

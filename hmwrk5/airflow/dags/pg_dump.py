@@ -28,9 +28,9 @@ def download_from_postgres():
         for tuple in cursor.fetchall():
             value, = tuple
 
-            path = f'/data/{value}'
+            path = f'/bronze/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}/{value}'
 
-            with client.write('path'+'/users.csv') as csv:
+            with client.write(path+f'/{value}.csv') as csv:
                 cursor.copy_expert(f'COPY {value} TO STDOUT WITH HEADER CSV', csv)
 
         cursor.close()
