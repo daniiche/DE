@@ -1,9 +1,7 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-
 from datetime import datetime
-
-from pg_dump import download_from_postgres
+from pg_dump import download_from_postgres, tables_from_postgres
 
 default_args = {
     'owner': 'airflow',
@@ -20,8 +18,16 @@ dag = DAG(
     default_args=default_args
 )
 
-t1 = PythonOperator(
-    task_id='pg_dump_function',
-    dag=dag,
-    python_callable=download_from_postgres
-)
+
+def Dynamic_Function(variable):
+    t1 = PythonOperator(
+        task_id=f'pg_dump_task_{variable}',
+        dag=dag,
+        python_callable=download_from_postgres,
+        op_kwargs = {"tbl_name": variable}
+    )
+    return t1
+
+for variable in tables_from_postgres():
+    value, = variable
+    task_1 = Dynamic_Function(value)

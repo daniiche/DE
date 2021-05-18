@@ -10,7 +10,7 @@ from datetime import datetime
 
 def load_config():
     logging.info('Loading config')
-    config_path = 'api_config.yaml'
+    config_path = '/home/user/airflow/dags/api_config.yaml'
     with open(os.path.join(os.getcwd(), config_path), mode='r') as yaml_file:
         config = yaml.safe_load(yaml_file)
         logging.info('Config loaded')
@@ -79,7 +79,7 @@ def request(token):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(filename=f'TT_parse_{datetime.now()}.log',
+    logging.basicConfig(filename=f'Api_handle_{datetime.now()}.log',
                         filemode='w',
                         level=logging.INFO,
                         format='%(asctime)s - %(levelname)s - %(message)s')

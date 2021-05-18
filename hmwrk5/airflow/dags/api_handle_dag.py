@@ -13,8 +13,8 @@ default_args = {
 }
 
 dag = DAG(
-    'etl_dag',
-    description='etl currency dags',
+    'api_handle_dag',
+    description='api handle etl currency dags',
     schedule_interval='@daily',
     start_date=datetime(2021,5,4,1,0),
     default_args=default_args
