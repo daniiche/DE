@@ -41,7 +41,7 @@ join inventory i
 join rental r
     on r.inventory_id = i.inventory_id
 join payment p
-    on p.rental_id = i.inventory_id
+    on p.rental_id = r.rental_id
 group by c.category_id, c.name
     order by sum_pay desc
 limit 1
