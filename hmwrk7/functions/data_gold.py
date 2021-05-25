@@ -13,42 +13,43 @@ def main():
 
     logging.info('Loading from silver')
     webhdfs = f'webhdfs://127.0.0.1:50070'
+    current_date = datetime.now().strftime("%Y-%m-%d")
 
     logging.info('Loading aisles')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/aisles'
+    path = f'/silver/{current_date}/aisles'
     aisles_df = spark.read.parquet(webhdfs+path)
 
     logging.info('Loading clients')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/clients'
+    path = f'/silver/{current_date}/clients'
     clients_df = spark.read.parquet(webhdfs+path)
 
     logging.info('Loading departments')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/departments'
+    path = f'/silver/{current_date}/departments'
     departments_df = spark.read.parquet(webhdfs+path)
 
     logging.info('Loading location_areas')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/location_areas'
+    path = f'/silver/{current_date}/location_areas'
     location_areas_df = spark.read.parquet(webhdfs+path)
 
     logging.info('Loading orders')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/orders'
+    path = f'/silver/{current_date}/orders'
     orders_df = spark.read.parquet(webhdfs+path)
 
     logging.info('Loading products')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/products'
+    path = f'/silver/{current_date}/products'
     products_df = spark.read.parquet(webhdfs+path)
 
     logging.info('Loading store_types')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/store_types'
+    path = f'/silver/{current_date}/store_types'
     store_types_df = spark.read.parquet(webhdfs+path)
 
     logging.info('Loading stores')
-    path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/stores'
+    path = f'/silver/{current_date}/stores'
     stores_df = spark.read.parquet(webhdfs+path)
 
     try:
         logging.info('Loading out stocks')
-        path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/out_of_stock'
+        path = f'/silver/{current_date}/out_of_stock'
         out_of_stock_df = spark.read.parquet(webhdfs+path)
     except:
         logging.error(f'No out stocks for today')

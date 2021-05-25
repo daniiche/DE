@@ -23,7 +23,7 @@ def main():
     for tbl in tables_from_postgres():
         tbl, = tbl
         logging.info(f'Reading {tbl}')
-        load_path = f'/bronze/{datetime.now().strftime("%Y-%m-%d")}/{tbl}.csv'
+        load_path = f'/bronze/{current_date}/{tbl}.csv'
         df = spark.read.load(webhdfs+load_path
                                         , header="true"
                                         , inferSchema="true"
@@ -31,14 +31,14 @@ def main():
         df = df \
             .distinct()
 
-        save_path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/{tbl}'
+        save_path = f'/silver/{current_date}/{tbl}'
         df.write \
                 .parquet(webhdfs+save_path, mode='overwrite')
         logging.info(f'{tbl} saved to silver')
 
     try:
         logging.info(f'Reading out stocks')
-        load_path = f'/bronze/{datetime.now().strftime("%Y-%m-%d")}/out_of_stock.json'
+        load_path = f'/bronze/{current_date}/out_of_stock.json'
         df = spark.read.load(webhdfs+load_path
                                         , inferSchema="true"
                                         , format="json")
@@ -46,7 +46,7 @@ def main():
         df = df \
             .distinct()
 
-        save_path = f'/silver/{datetime.now().strftime("%Y-%m-%d")}/out_of_stock'
+        save_path = f'/silver/{current_date}/out_of_stock'
         df.write \
             .parquet(webhdfs + save_path, mode='overwrite')
 
