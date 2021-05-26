@@ -6,38 +6,50 @@ import os
 from hdfs import InsecureClient
 import logging
 from datetime import datetime
+from airflow.hooks.base_hook import BaseHook
 
-
+#if run locally
+# def load_config():
+#     logging.info('Loading config')
+#     config_path = 'api_config.yaml'
+#     with open(os.path.join(os.getcwd(), config_path), mode='r') as yaml_file:
+#         config = yaml.safe_load(yaml_file)
+#         logging.info('Config loaded')
+#         return config
+#if run from airflow
 def load_config():
-    logging.info('Loading config')
-    config_path = 'api_config.yaml'
-    with open(os.path.join(os.getcwd(), config_path), mode='r') as yaml_file:
-        config = yaml.safe_load(yaml_file)
-        logging.info('Config loaded')
-        return config
+    connection = BaseHook.get_connection('oltp_api')
+
+    config = {
+        'url': connection.host
+        , 'username': connection.login
+        , 'password': connection.password
+    }
+    logging.info('Load config ok')
+    return config
 
 def auth():
     logging.info('Starting auth')
-    conf = load_config()['api_handle']
-    url = conf['url']+conf['endpoint_auth']
-    data = json.dumps(conf['credentials'])
+    conf = load_config()
+    url = conf['url']+'/auth'
+    data = json.dumps({'username': conf['username'], 'password': conf['password']})
     headers = {"content-type": "application/json"}
+
     try:
         result = requests.post(url, data=data, headers=headers)
         result.raise_for_status()
-        token = "JWT " + result.json()['access_token']
+        token = 'JWT ' + result.json()['access_token']
         logging.info('Auth success')
         return request(token)
 
     except HTTPError:
-        logging.error('Exception with:')
-        logging.error(conf['url']+conf['endpoint'])
+        logging.error('Exception with:'+url)
 
 def get(url, date, headers):
     logging.info('Start geting')
     try:
         result = requests.get(url
-                              , data=json.dumps({"date": date})
+                              , data=json.dumps({'date': date})
                               , headers=headers
                               , timeout=10)
         logging.info('Getting ok')
@@ -62,10 +74,10 @@ def save(inp):
 
 def request(token):
     logging.info('Start requesting')
-    conf = load_config()['api_handle']
-    url = conf['url'] + conf['endpoint_get']
-    start_date = datetime.now().strftime("%Y-%m-%d")
-    headers = conf['headers']
+    conf = load_config()
+    url = conf['url'] + '/out_of_stock'
+    start_date = datetime.now().strftime('%Y-%m-%d')
+    headers = {"content-type": "application/json", "authorization": token}
     headers['authorization'] = token
 
     result = get(url, start_date, headers)

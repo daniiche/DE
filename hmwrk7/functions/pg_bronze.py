@@ -4,17 +4,32 @@ import yaml
 from hdfs import InsecureClient
 import logging
 from datetime import datetime
+from airflow.hooks.base_hook import BaseHook
 
+#if run locally
+# def load_config():
+#     config_path = 'pg_config.yaml'
+#     with open(os.path.join(os.getcwd(), config_path), mode='r') as yaml_file:
+#         config = yaml.safe_load(yaml_file)
+#         logging.info('Load config ok')
+#         return config
+#if run from airflow
 def load_config():
-    config_path = 'pg_config.yaml'
-    with open(os.path.join(os.getcwd(), config_path), mode='r') as yaml_file:
-        config = yaml.safe_load(yaml_file)
-        logging.info('Load config ok')
-        return config
+    connection = BaseHook.get_connection('oltp_postgres')
+
+    config = {
+            'host': connection.host
+            , 'port': connection.port
+            , 'database': 'dshop_bu'
+            , 'user': connection.login
+            , 'password': connection.password
+    }
+    logging.info('Load config ok')
+    return config
 
 # точно так же можно скопировать в бд
 def tables_from_postgres():
-    config = load_config()['pg_config']
+    config = load_config()
     # прередать все параметры из словаря, две здездочки раскрыли словарь
     with psycopg2.connect(**config) as pg_connection:
         cursor = pg_connection.cursor()
@@ -28,7 +43,7 @@ def tables_from_postgres():
         return tbl_lst
 
 def download_from_postgres(tbl_name):
-    config = load_config()['pg_config']
+    config = load_config()
     client = InsecureClient('http://127.0.0.1:50070/', user='user')
 
     with psycopg2.connect(**config) as pg_connection:

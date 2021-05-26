@@ -1,6 +1,3 @@
-api_handle:
-  url: "https://robot-dreams-de-api.herokuapp.com"
-  endpoint_get: "/out_of_stock"
-  endpoint_auth: "/auth"
-  credentials: { "username": "rd_dreams", "password": "djT6LasE" }
-  headers: {"content-type": "application/json", "authorization": NULL}
+url: 'https://robot-dreams-de-api.herokuapp.com'
+"username": 'rd_dreams'
+"password": 'djT6LasE'

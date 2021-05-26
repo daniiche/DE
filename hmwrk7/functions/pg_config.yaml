@@ -1,6 +1,5 @@
-pg_config:
-    'host': '192.168.1.39'
-    'port': '5432'
-    'database': 'dshop_bu'
-    'user': 'pguser'
-    'password': 'secret'
+'host': '192.168.1.39'
+'port': '5432'
+'database': 'dshop_bu'
+'user': 'pguser'
+'password': 'secret'
