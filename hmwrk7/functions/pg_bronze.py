@@ -20,7 +20,7 @@ def load_config():
     config = {
             'host': connection.host
             , 'port': connection.port
-            , 'database': 'dshop_bu'
+            , 'database': connection.schema
             , 'user': connection.login
             , 'password': connection.password
     }
